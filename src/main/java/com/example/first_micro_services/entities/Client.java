@@ -2,19 +2,19 @@ package com.example.first_micro_services.entities;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.*;
+import org.hibernate.annotations.IndexColumn;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.Date;
+import java.io.Serializable;
+import java.util.*;
 
 @Entity
 @Table(name = "table_client")
 @Data @AllArgsConstructor  @NoArgsConstructor
-public class Client {
+public class Client  implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idClient;
@@ -38,13 +38,13 @@ public class Client {
     @Embedded
     private Adresse adresse;
 
-    @JsonIgnore
-    @OneToOne(mappedBy = "client",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "client",fetch = FetchType.EAGER)
     private ClientDetails clientDetails;
 
-    @ToString.Exclude
-    @JsonIgnore
+
+    //@JsonManagedReference
     @OneToMany(mappedBy = "client",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-    private Collection<Compte> lesComptes;
+    //@JsonIgnoreProperties("client")
+    private List<Compte> LesComptes;
 
 }

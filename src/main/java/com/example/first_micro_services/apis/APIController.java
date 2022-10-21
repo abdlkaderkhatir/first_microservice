@@ -52,16 +52,32 @@ public class APIController {
         c.setPassword(payload.get("password").toString());
         c.setDateCreation(new Date());
 
-        Long idClient = Long.valueOf(payload.get("idclient").toString());
+        Long idClient = Long.valueOf(payload.get("idClient").toString());
         c.setClient(clientrepo.findById(idClient).get());
 
         return compterepo.save(c);
 
     }
 
+    @PutMapping("/client/{id}")  //Put http://localhost:8081/client-api/client/1
+    public Client updateClient(@PathVariable(value = "id") Long idClient,
+                               @RequestBody Client client) {
+        if (clientrepo.findById(idClient).isPresent()) {
+            client.setIdClient(idClient);
+            return clientrepo.save(client);
+        }
+        return null;
+    }
 
+    @DeleteMapping("/client/{id}")   //Delete http://localhost:8081/client-api/client/1?
 
+    public String DeleteClient(@PathVariable(value = "id") Long idClient){
 
+        if (clientrepo.findById(idClient).isPresent()){
+            clientrepo.deleteById(idClient);
+            return "Correctly deleted";}
+        return "the ID is not valid";
+    }
 
 
 }
